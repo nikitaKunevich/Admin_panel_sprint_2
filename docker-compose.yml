@@ -1,0 +1,45 @@
+# Development
+version: "3.8"
+
+services:
+  movies:
+    build:
+      context: movies_admin
+    command: bash -c "gunicorn -b 0.0.0.0 config.wsgi --log-level $$LOG_LEVEL"
+    volumes:
+    - ./movies_admin:/app
+    - ./etl:/etl
+    - static:/static
+    env_file:
+      - deploys/dev.env
+    depends_on:
+      - postgres
+
+  postgres:
+    image: postgres:12.1
+    restart: always
+    env_file:
+      - deploys/dev.env
+    environment:
+      POSTGRES_PASSWORD: devpass
+    volumes:
+      - devdb:/var/lib/postgresql/data
+    ports:
+    - 5432:5432
+
+  nginx:
+    image: nginx:1.19.2
+    restart: always
+    env_file:
+      - deploys/dev.env
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+      - static:/static
+    ports:
+      - 8080:80
+    depends_on:
+      - movies
+
+volumes:
+  devdb:
+  static:

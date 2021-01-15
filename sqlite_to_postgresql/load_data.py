@@ -25,6 +25,7 @@ def parse_args():
 
 
 if __name__ == "__main__":
+    print("Start migrating data from SQLite to PostgreSQL")
     args = parse_args()
 
     # noinspection PyTypeChecker
@@ -41,3 +42,5 @@ if __name__ == "__main__":
             init_sql = open(args.postgres_init_sql, encoding="utf-8").read()
             curs.execute(init_sql)
         write_data_to_postgres(processed_data, postgres_connection)
+
+    print(f"Migrated {len(processed_data.film_works)} movies, {len(processed_data.persons)} persons, {len(processed_data.genres)} genres from SQLite to PostgreSQL")

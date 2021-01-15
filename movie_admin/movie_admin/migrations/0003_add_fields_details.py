@@ -9,7 +9,7 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('movie_admin', '0002_auto_20210109_0004'),
+        ('movie_admin', '0002_make_models_managed'),
     ]
 
     operations = [
